@@ -42,6 +42,12 @@ mongodbStart () {
     CMD="$CMD --oplogSize $OPLOG_SIZE"
   fi
 
+  CMD="$CMD $1"
+
+  echo "========================================================================"
+  echo "Mongodb launch command: $CMD"
+  echo "========================================================================"
+
   $CMD &
 
   if [ ! -f /data/db/.mongodb_password_set ]; then
@@ -54,6 +60,7 @@ mongodbStart () {
 mongodbHelp () {
   echo "Available options:"
   echo "  mongodb       - Starts MongoDB with default options (default)"
+  echo "  --options     - Like 'mongodb' with extra options from. e.g: --smallfiles"
   echo "  help          - Displays this help!"
   echo "  [command]     - Execute the specified linux command. e.g: bash"
 }
@@ -61,6 +68,9 @@ mongodbHelp () {
 case "$1" in
   mongodb)
     mongodbStart
+    ;;
+  --options)
+    mongodbStart ${@:2}
     ;;
   help)
     mongodbHelp
